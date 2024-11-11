@@ -3,6 +3,7 @@ package main
 import (
 	"context"
 	"errors"
+	"net"
 	"net/http"
 	"os"
 	"os/signal"
@@ -37,15 +38,37 @@ func main() {
 	}
 }
 
-func getBindAddress() string {
-	if bindAddress := os.Getenv("BIND_ADDRESS"); bindAddress != "" {
-		return bindAddress
+func getPrimaryBindAddress() (string, error) {
+	// Environment variables for addresses
+	primaryPort := os.Getenv("PORT1")
+	secondaryPort := os.Getenv("PORT2")
+
+	if primaryPort == "" {
+		primaryPort = "3000"
 	}
-	if port := os.Getenv("PORT"); port != "" {
-		return ":" + port
+	if secondaryPort == "" {
+		secondaryPort = "3001"
 	}
-	return "127.0.0.1:3000"
+
+	// Function to check if a port is available
+	isPortAvailable := func(port string) bool {
+		ln, err := net.Listen("tcp", ":"+port)
+		if err != nil {
+			return false
+		}
+		ln.Close() // Close the listener immediately if the port is free
+		return true
+	}
+
+	if isPortAvailable(primaryPort) {
+		return "0.0.0.0:" + primaryPort, nil
+	} else if isPortAvailable(secondaryPort) {
+		return "0.0.0.0:" + secondaryPort, nil
+	} else {
+		return "", errors.New("both primary and secondary ports are unavailable")
+	}
 }
+
 
 func run(log *logger.Logger) error {
 	db, err := database.New()
