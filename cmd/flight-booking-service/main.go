@@ -83,11 +83,17 @@ func run(log *logger.Logger) error {
 	s := service.New(log, db)
 	s.Auth["user"] = "pw"
 
+	// Capture both address and error from getBindAddress()
+	addr, err := getBindAddress()
+	if err != nil {
+		return err // Handle error if no available address
+	}
+
 	srv := &http.Server{
 		ReadTimeout:  10 * time.Second,
 		WriteTimeout: 60 * time.Second,
 		IdleTimeout:  60 * time.Second,
-		Addr:         getBindAddress(),
+		Addr:         addr, // Use the obtained address
 		Handler:      s,
 	}
 
@@ -119,7 +125,6 @@ func run(log *logger.Logger) error {
 		if err = srv.Close(); err != nil {
 			log.Error(err)
 		}
-		// finishing pending database writes
 		<-time.After(time.Second)
 	} else if err != nil {
 		log.Error(err)
@@ -128,3 +133,4 @@ func run(log *logger.Logger) error {
 	log.Info("closing database...")
 	return db.Close()
 }
+
