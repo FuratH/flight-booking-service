@@ -7,8 +7,11 @@ import (
 	"net/http"
 	"os"
 	"os/signal"
-	"syscall"
 	"time"
+	"strconv"
+	"syscall"
+	"unsafe"
+
 
 	"github.com/christophwitzko/flight-booking-service/pkg/database"
 	"github.com/christophwitzko/flight-booking-service/pkg/database/seeder"
@@ -16,7 +19,38 @@ import (
 	"github.com/christophwitzko/flight-booking-service/pkg/service"
 )
 
+func SetCPUAffinity(cpu int) error {
+	var mask [1024 / 64]uint64
+	mask[cpu/64] = 1 << (cpu % 64)
+
+	_, _, errno := syscall.RawSyscall(
+		syscall.SYS_SCHED_SETAFFINITY,
+		0,
+		uintptr(len(mask)*8),
+		uintptr(unsafe.Pointer(&mask[0])),
+	)
+
+	if errno != 0 {
+		return errno
+	}
+	return nil
+}
+
 func main() {
+	// Get CPU core from environment variable, default to core 0
+	cpuCore := 0
+	if coreStr := os.Getenv("CPU_CORE"); coreStr != "" {
+		if core, err := strconv.Atoi(coreStr); err == nil {
+			cpuCore = core
+		}
+	}
+
+	// Set CPU affinity based on CPU_CORE
+	if err := SetCPUAffinity(cpuCore); err != nil {
+		panic("failed to set CPU affinity: " + err.Error())
+	}
+
+
 	level := logger.DebugLevel
 	levelName := os.Getenv("LOG_LEVEL")
 	switch levelName {
