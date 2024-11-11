@@ -38,7 +38,7 @@ func main() {
 	}
 }
 
-func getPrimaryBindAddress() (string, error) {
+func getBindAddress() (string, error) {
 	// Environment variables for addresses
 	primaryPort := os.Getenv("PORT1")
 	secondaryPort := os.Getenv("PORT2")
