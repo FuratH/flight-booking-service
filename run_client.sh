@@ -14,8 +14,9 @@ k6 run /flight-booking-service/k6/script.js -e target="$SUT_IP:$SERVICE_PORT" \
 # Wait for the test to complete
 wait
 
-# Upload results to Google Cloud Storage
-gsutil cp client_results_${SERVICE_PORT}_${TIMESTAMP}.csv gs://$BUCKET_NAME/client_results_${SERVICE_PORT}_${TIMESTAMP} & gsutil cp client_summary_${SERVICE_PORT}_${TIMESTAMP}.json gs://$BUCKET_NAME/client_summary_${SERVICE_PORT}_${TIMESTAMP}.json
+
+gsutil cp client_results_${SERVICE_PORT}_${TIMESTAMP}.csv gs://duet-benchmarking-results/client_results_${SERVICE_PORT}_${TIMESTAMP}.csv & gsutil cp client_summary_${SERVICE_PORT}_${TIMESTAMP}.json gs://duet-benchmarking-results/client_summary_${SERVICE_PORT}_${TIMESTAMP}.json
+
 
 
 # Indicate that the task is done
