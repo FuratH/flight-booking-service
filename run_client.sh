@@ -15,8 +15,8 @@ k6 run /flight-booking-service/k6/script.js -e target="$SUT_IP:$SERVICE_PORT" \
 wait
 
 # Upload results to Google Cloud Storage
-gsutil cp /home/$USERNAME/client_results_${TIMESTAMP}.csv gs://$BUCKET_NAME/client_results_${TIMESTAMP}.csv
-gsutil cp /home/$USERNAME/client_summary_${TIMESTAMP}.json gs://$BUCKET_NAME/client_summary_${TIMESTAMP}.json
+gsutil cp client_results_${TIMESTAMP}.csv gs://$BUCKET_NAME/client_results_${TIMESTAMP}.csv
+gsutil cp client_summary_${TIMESTAMP}.json gs://$BUCKET_NAME/client_summary_${TIMESTAMP}.json
 
 # Indicate that the task is done
-touch /home/$USERNAME/done
+touch /done
