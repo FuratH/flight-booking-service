@@ -8,8 +8,8 @@ BUCKET_NAME=$4
 USERNAME=$(whoami)
 
 # Run the k6 load test
-nohup k6 run /flight-booking-service/k6/script.js -e target="$SUT_IP:$SERVICE_PORT" \
-    --out csv=client_results_${TIMESTAMP}.csv --summary-export client_summary_${TIMESTAMP}.json &
+k6 run /flight-booking-service/k6/script.js -e target="$SUT_IP:$SERVICE_PORT" \
+    --out csv=client_results_${TIMESTAMP}.csv --summary-export client_summary_${TIMESTAMP}.json 
 
 # Wait for the test to complete
 wait
