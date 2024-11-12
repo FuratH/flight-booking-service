@@ -9,7 +9,7 @@ USERNAME=$(whoami)
 
 # Run the k6 load test
 k6 run /flight-booking-service/k6/script.js -e target="$SUT_IP:$SERVICE_PORT" \
-    --out csv=client_results_${SERVICE_PORT}_${TIMESTAMP} --summary-export client_summary_${SERVICE_PORT}_${TIMESTAMP}.json
+    --out csv=client_results_${SERVICE_PORT}_${TIMESTAMP}.csv --summary-export client_summary_${SERVICE_PORT}_${TIMESTAMP}.json
 
 # Wait for the test to complete
 wait
