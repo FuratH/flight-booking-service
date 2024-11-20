@@ -18,10 +18,11 @@ wait
 gsutil cp client_results_${SERVICE_PORT}.csv gs://duet-benchmarking-results/${TIMESTAMP}/client_results_${SERVICE_PORT}.csv & gsutil cp client_summary_${SERVICE_PORT}.json gs://duet-benchmarking-results/${TIMESTAMP}/client_summary_${SERVICE_PORT}.json
 
 
+#sudo gcloud compute ssh hamdanfurat@sut --zone europe-west3-c -- \
+ #   "gsutil cp '/tmp/cpu_usage.log' 'gs://duet-benchmarking-results/${TIMESTAMP}/cpu_usage.log'"
+
 sudo gcloud compute ssh hamdanfurat@sut --zone europe-west3-c -- \
-    "gsutil cp '/tmp/cpu_usage.log' 'gs://duet-benchmarking-results/${TIMESTAMP}/cpu_usage.log'"
-
-
+    "gsutil cp '/tmp/cpu_usage.log' 'gs://duet-benchmarking-results/${TIMESTAMP}/cpu_usage.log' & gsutil cp '/tmp/top_output.log' 'gs://duet-benchmarking-results/${TIMESTAMP}/top_output.log'"
 
 
 touch /done
