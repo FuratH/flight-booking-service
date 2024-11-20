@@ -9,7 +9,7 @@ export const options = {
         searchFlights: {
             executor: 'per-vu-iterations',
             exec: 'searchFlights',
-            vus: __ENV.searchFlights_vus || 30,
+            vus: __ENV.searchFlights_vus || 20,
             iterations: __ENV.searchFlights_iterations || 800,
             maxDuration: '15m'
         },
