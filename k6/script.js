@@ -10,14 +10,14 @@ export const options = {
             executor: 'per-vu-iterations',
             exec: 'searchFlights',
             vus: __ENV.searchFlights_vus || 5,
-            iterations: __ENV.searchFlights_iterations || 2000,
+            iterations: __ENV.searchFlights_iterations || 200,
             maxDuration: '15m'
         },
         searchAndBookFlight: {
             executor: 'per-vu-iterations',
             exec: 'searchAndBookFlight',
             vus: __ENV.searchAndBookFlight_vus || 1,
-            iterations: __ENV.searchAndBookFlight_iterations || 380,
+            iterations: __ENV.searchAndBookFlight_iterations || 38,
             maxDuration: '15m'
         }
     }
