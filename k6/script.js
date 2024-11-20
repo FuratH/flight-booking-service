@@ -9,16 +9,16 @@ export const options = {
         searchFlights: {
             executor: 'per-vu-iterations',
             exec: 'searchFlights',
-            vus: __ENV.searchFlights_vus || 50,
+            vus: __ENV.searchFlights_vus || 5,
             iterations: __ENV.searchFlights_iterations || 2000,
-            maxDuration: '50m'
+            maxDuration: '15m'
         },
         searchAndBookFlight: {
             executor: 'per-vu-iterations',
             exec: 'searchAndBookFlight',
-            vus: __ENV.searchAndBookFlight_vus || 10,
+            vus: __ENV.searchAndBookFlight_vus || 1,
             iterations: __ENV.searchAndBookFlight_iterations || 380,
-            maxDuration: '50m'
+            maxDuration: '15m'
         }
     }
 }

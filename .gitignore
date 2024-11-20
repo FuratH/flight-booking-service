@@ -1,2 +1,5 @@
 .idea/
 *.dot
+
+*/analysis/**
+**/analysis/**
