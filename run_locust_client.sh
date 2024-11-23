@@ -8,7 +8,7 @@ TIMESTAMP=$3
 BUCKET_NAME=$4
 USERNAME=$(whoami)
 
-locust -f /flight-booking-service/locust/benchmark.py --host=http://$SUT_IP:$SERVICE_PORT --headless -u 230 --run-time 10m --csv=client_results_${SERVICE_PORT} --html=client_results_${SERVICE_PORT}.html --spawn-rate=50
+locust -f /flight-booking-service/locust/benchmark.py --host=http://$SUT_IP:$SERVICE_PORT --headless -u 180 --run-time 10m --csv=client_results_${SERVICE_PORT} --html=client_results_${SERVICE_PORT}.html --spawn-rate=10
 
 wait
 
