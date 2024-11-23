@@ -7,7 +7,7 @@ TIMESTAMP=$3
 BUCKET_NAME=$4
 USERNAME=$(whoami)
 
-python3 locust -f /flight-booking-service/locust/benchmark.py --host $SUT_IP:$SERVICE_PORT --web-port $SERVICE_PORT
+locust -f /flight-booking-service/locust/benchmark.py --host $SUT_IP:$SERVICE_PORT --web-port $SERVICE_PORT
 
 
 
