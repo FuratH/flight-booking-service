@@ -18,3 +18,5 @@ gsutil cp ../client_results_${SERVICE_PORT}_stats.csv gs://duet-benchmarking-res
 
 
 touch /done
+
+locust -f /flight-booking-service/locust/benchmark.py --host=http://35.198.124.184:3000 --headless -u 150 --run-time 10m --csv=client_results_3000 --html=client_results_3000.html --spawn-rate=10
