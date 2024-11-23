@@ -15,8 +15,7 @@ wait
 
 gsutil cp ../client_results_${SERVICE_PORT}_stats.csv gs://duet-benchmarking-results/${TIMESTAMP}/client_results_${SERVICE_PORT}_stats.csv & gsutil cp ../client_results_${SERVICE_PORT}.html gs://duet-benchmarking-results/${TIMESTAMP}/client_results_${SERVICE_PORT}.html
 
-
+gsutil cp ../client_results_3000_stats.csv gs://duet-benchmarking-results/a/client_results_3000_stats.csv & gsutil cp ../client_results_3000.html gs://duet-benchmarking-results/a/client_results_3000.html
+gsutil cp ../client_results_3001_stats.csv gs://duet-benchmarking-results/a/client_results_3001_stats.csv & gsutil cp ../client_results_3001.html gs://duet-benchmarking-results/a/client_results_3001.html
 
 touch /done
-
-locust -f /flight-booking-service/locust/benchmark.py --host=http://35.198.124.184:3000 --headless -u 150 --run-time 10m --csv=client_results_3000 --html=client_results_3000.html --spawn-rate=10
