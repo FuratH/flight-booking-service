@@ -38,14 +38,17 @@ func SetCPUAffinity(cpu int) error {
 
 func main() {
 	// Define command-line flags for CPU core and port
-	cpuCore := flag.Int("cpuCore", 0, "CPU core to bind the program to")
+	//cpuCore := flag.Int("cpuCore", 0, "CPU core to bind the program to")
 	port := flag.Int("port", 3000, "Port for the HTTP server")
 	flag.Parse()
 
+	/*
 	// Set CPU affinity based on the provided core
 	if err := SetCPUAffinity(*cpuCore); err != nil {
 		panic("failed to set CPU affinity: " + err.Error())
 	}
+
+	*/
 
 	// Set the address using the provided port
 	addr := fmt.Sprintf("0.0.0.0:%d", *port)

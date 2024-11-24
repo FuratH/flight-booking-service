@@ -26,3 +26,5 @@ sudo gcloud compute ssh hamdanfurat@sut --zone europe-west3-c -- \
 
 
 touch /done
+
+gsutil cp client_results_3000.csv gs://duet-benchmarking-results/2/client_results_3000.csv & gsutil cp client_summary_3000.json gs://duet-benchmarking-results/2/client_summary_3000.json & gsutil cp client_results_3001.csv gs://duet-benchmarking-results/2/client_results_3001.csv & gsutil cp client_summary_3001.json gs://duet-benchmarking-results/2/client_summary_3001.json
