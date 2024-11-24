@@ -10,7 +10,6 @@ import (
 	"os/signal"
 	"syscall"
 	"time"
-	"unsafe"
 
 	"github.com/christophwitzko/flight-booking-service/pkg/database"
 	"github.com/christophwitzko/flight-booking-service/pkg/database/seeder"
@@ -19,7 +18,7 @@ import (
 )
 
 // SetCPUAffinity sets the CPU affinity for the current process.
-func SetCPUAffinity(cpu int) error {
+/*func SetCPUAffinity(cpu int) error {
 	var mask [1024 / 64]uint64
 	mask[cpu/64] = 1 << (cpu % 64)
 
@@ -35,7 +34,7 @@ func SetCPUAffinity(cpu int) error {
 	}
 	return nil
 }
-
+*/
 func main() {
 	// Define command-line flags for CPU core and port
 	//cpuCore := flag.Int("cpuCore", 0, "CPU core to bind the program to")
