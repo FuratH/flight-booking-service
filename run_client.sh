@@ -11,6 +11,9 @@ USERNAME=$(whoami)
 k6 run /flight-booking-service/k6/script.js -e target="$SUT_IP:$SERVICE_PORT" \
     --out csv=client_results_${SERVICE_PORT}.csv --summary-export client_summary_${SERVICE_PORT}.json
 
+k6 run script.js -e target="35.207.114.153:3001" --out csv=client_results_3001.csv --summary-export client_summary_3001.json & k6 run script.js -e target="35.207.114.153:3000" --out csv=client_results_3000.csv --summary-export client_summary_3000.json
+
+
 # Wait for the test to complete
 wait
 
@@ -27,4 +30,4 @@ sudo gcloud compute ssh hamdanfurat@sut --zone europe-west3-c -- \
 
 touch /done
 
-gsutil cp client_results_3000.csv gs://duet-benchmarking-results/2/client_results_3000.csv & gsutil cp client_summary_3000.json gs://duet-benchmarking-results/2/client_summary_3000.json & gsutil cp client_results_3001.csv gs://duet-benchmarking-results/2/client_results_3001.csv & gsutil cp client_summary_3001.json gs://duet-benchmarking-results/2/client_summary_3001.json
+gsutil cp client_results_3000.csv gs://duet-benchmarking-results/4/client_results_3000.csv & gsutil cp client_summary_3000.json gs://duet-benchmarking-results/4/client_summary_3000.json & gsutil cp client_results_3001.csv gs://duet-benchmarking-results/4/client_results_3001.csv & gsutil cp client_summary_3001.json gs://duet-benchmarking-results/4/client_summary_3001.json
