@@ -13,7 +13,7 @@ VERSION=$2
 
 # Configuration
 CGROUP_PATH="/sys/fs/cgroup/app-runner/$VERSION"
-PROGRAM_PATH="/tmp/.application/$VERSION/$VERSION"
+PROGRAM_PATH="./cmd/flight-booking-service/flight-booking-service"
 BIND_ADDRESS="0.0.0.0:$PORT"
 
 # Ensure the cgroup exists
