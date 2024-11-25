@@ -35,8 +35,10 @@ if [ ! -x "$PROGRAM_PATH" ]; then
 fi
 
 # Start the program with the specified environment variable in the background
-BIND_ADDRESS="$BIND_ADDRESS" "$PROGRAM_PATH" &
+BIND_ADDRESS="$BIND_ADDRESS" "$PROGRAM_PATH" --port="$PORT" & 
 PID=$!
+
+echo BIND_ADDRESS
 
 if [ $? -ne 0 ]; then
     echo "Failed to start the program: $PROGRAM_PATH"
