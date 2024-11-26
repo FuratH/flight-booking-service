@@ -11,7 +11,7 @@ USERNAME=$(whoami)
 k6 run /flight-booking-service/k6/script.js -e target="$SUT_IP:$SERVICE_PORT" \
     --out csv=client_results_${SERVICE_PORT}.csv --summary-export client_summary_${SERVICE_PORT}.json
 
-#k6 run script.js -e target="35.207.114.153:3001" --out csv=client_results_3001.csv --summary-export client_summary_3001.json & k6 run script.js -e target="35.207.114.153:3000" --out csv=client_results_3000.csv --summary-export client_summary_3000.json
+#k6 run script.js -e target="35.207.126.79:3001" --out csv=client_results_3001.csv & k6 run script.js -e target="35.207.126.79:3000" --out csv=client_results_3000.csv
 
 
 # Wait for the test to complete
@@ -24,7 +24,7 @@ gsutil cp client_results_${SERVICE_PORT}.csv gs://duet-benchmarking-results/${TI
 #sudo gcloud compute ssh hamdanfurat@sut --zone europe-west3-c -- \
  #   "gsutil cp '/tmp/cpu_usage.log' 'gs://duet-benchmarking-results/${TIMESTAMP}/cpu_usage.log'"
 
-#sudo gcloud compute ssh hamdanfurat@sut --zone europe-west3-c -- \
+sudo gcloud compute ssh hamdanfurat@sut --zone europe-west3-c -- \
     "gsutil cp '/tmp/cpu_usage.log' 'gs://duet-benchmarking-results/${TIMESTAMP}/cpu_usage.log' & gsutil cp '/tmp/top_output.log' 'gs://duet-benchmarking-results/${TIMESTAMP}/top_output.log'"
 
 
