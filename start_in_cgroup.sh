@@ -16,6 +16,16 @@ CGROUP_PATH="/sys/fs/cgroup/app-runner/$VERSION"
 PROGRAM_PATH="./cmd/flight-booking-service/flight-booking-service"
 BIND_ADDRESS="0.0.0.0:$PORT"
 
+# CPU Affinity
+if [ "$PORT" -eq 3000 ]; then
+    CPU_AFFINITY="0,1"
+elif [ "$PORT" -eq 3001 ]; then
+    CPU_AFFINITY="2,4"
+else
+    echo "Unsupported port: $PORT. Exiting."
+    exit 1
+fi
+
 # Ensure the cgroup exists
 if [ ! -d "$CGROUP_PATH" ]; then
     echo "Cgroup $CGROUP_PATH does not exist. Exiting."
@@ -34,18 +44,16 @@ if [ ! -x "$PROGRAM_PATH" ]; then
     exit 1
 fi
 
-# Start the program with the specified environment variable in the background
-BIND_ADDRESS="$BIND_ADDRESS" "$PROGRAM_PATH" --port="$PORT" & 
+# Start the program with the specified environment variable in the background with CPU affinity
+taskset -c $CPU_AFFINITY BIND_ADDRESS="$BIND_ADDRESS" "$PROGRAM_PATH" --port="$PORT" & 
 PID=$!
-
-echo BIND_ADDRESS
 
 if [ $? -ne 0 ]; then
     echo "Failed to start the program: $PROGRAM_PATH"
     exit 1
 fi
 
-echo "Program started with PID $PID."
+echo "Program started with PID $PID and CPU affinity set to cores $CPU_AFFINITY."
 
 # Assign the PID to the cgroup
 echo $PID > "$CGROUP_PATH/cgroup.procs"
