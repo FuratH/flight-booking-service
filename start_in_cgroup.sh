@@ -45,7 +45,8 @@ if [ ! -x "$PROGRAM_PATH" ]; then
 fi
 
 # Start the program with the specified environment variable in the background with CPU affinity
-taskset -c $CPU_AFFINITY BIND_ADDRESS="$BIND_ADDRESS" "$PROGRAM_PATH" --port="$PORT" & 
+export BIND_ADDRESS="$BIND_ADDRESS"
+taskset -c $CPU_AFFINITY "$PROGRAM_PATH" --port="$PORT" &
 PID=$!
 
 if [ $? -ne 0 ]; then
