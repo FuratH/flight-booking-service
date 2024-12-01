@@ -18,9 +18,9 @@ BIND_ADDRESS="0.0.0.0:$PORT"
 
 # CPU Affinity
 if [ "$PORT" -eq 3000 ]; then
-    CPU_AFFINITY="0,1"
+    CPU_AFFINITY="0"
 elif [ "$PORT" -eq 3001 ]; then
-    CPU_AFFINITY="2,4"
+    CPU_AFFINITY="1"
 else
     echo "Unsupported port: $PORT. Exiting."
     exit 1
