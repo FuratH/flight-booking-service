@@ -16,11 +16,11 @@ CGROUP_PATH="/sys/fs/cgroup/app-runner/$VERSION"
 PROGRAM_PATH="./cmd/flight-booking-service/flight-booking-service"
 BIND_ADDRESS="0.0.0.0:$PORT"
 
-# CPU Affinity
+# Define CPU affinity based on the port
 if [ "$PORT" -eq 3000 ]; then
-    CPU_AFFINITY="0"
+    CPU_AFFINITY="0,1"  # Use cores 0 and 1
 elif [ "$PORT" -eq 3001 ]; then
-    CPU_AFFINITY="1"
+    CPU_AFFINITY="2,3"  # Use cores 2 and 3
 else
     echo "Unsupported port: $PORT. Exiting."
     exit 1
