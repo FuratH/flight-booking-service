@@ -1,9 +1,9 @@
 #!/bin/bash
 
-# Check for correct usage
-if [ "$#" -ne 3 ]; then
-    echo "Usage: $0 <port> <version> <component>"
-    echo "Example: $0 3000 v1 SUT"
+# Validate number of arguments based on the component
+if [ "$#" -lt 3 ] || [ "$#" -gt 5 ]; then
+    echo "Usage for SUT: $0 <port> <version> SUT"
+    echo "Usage for client: $0 <port> <version> client <timestamp> <bucket_name>"
     echo "Component must be either 'SUT' or 'client'."
     exit 1
 fi
@@ -20,6 +20,27 @@ if [ "$COMPONENT" != "SUT" ] && [ "$COMPONENT" != "client" ]; then
     echo "Invalid component: $COMPONENT. Must be 'SUT' or 'client'. Exiting."
     exit 1
 fi
+
+# Ensure proper arguments are provided based on the component
+if [ "$COMPONENT" == "client" ]; then
+    if [ -z "$TIMESTAMP" ] || [ -z "$BUCKET_NAME" ]; then
+        echo "For client, you must provide <timestamp> and <bucket_name>."
+        echo "Usage: $0 <port> <version> client <timestamp> <bucket_name>"
+        exit 1
+    fi
+elif [ "$COMPONENT" == "SUT" ]; then
+    if [ -n "$TIMESTAMP" ] || [ -n "$BUCKET_NAME" ]; then
+        echo "For SUT, no additional arguments beyond <port>, <version>, and 'SUT' are allowed."
+        echo "Usage: $0 <port> <version> SUT"
+        exit 1
+    fi
+fi
+
+# Debugging output (optional, can be removed)
+echo "Port: $PORT"
+echo "Version: $VERSION"
+echo "Component: $COMPONENT"
+[ "$COMPONENT" == "client" ] && echo "Timestamp: $TIMESTAMP, Bucket Name: $BUCKET_NAME"
 
 # Configuration
 CGROUP_PATH="/sys/fs/cgroup/app-runner/$VERSION"
@@ -65,12 +86,8 @@ if [ "$COMPONENT" == "SUT" ]; then
     export BIND_ADDRESS="$BIND_ADDRESS"
     taskset -c $CPU_AFFINITY "$PROGRAM_PATH" --port="$PORT" &
 else
-   # bash -c "$PROGRAM_PATH" &
     taskset -c $CPU_AFFINITY bash "$PROGRAM_PATH" &
 fi
-
-
-
 
 PID=$!
 
