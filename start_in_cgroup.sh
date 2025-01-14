@@ -65,8 +65,12 @@ if [ "$COMPONENT" == "SUT" ]; then
     export BIND_ADDRESS="$BIND_ADDRESS"
     taskset -c $CPU_AFFINITY "$PROGRAM_PATH" --port="$PORT" &
 else
-    bash -c "$PROGRAM_PATH" &
+   # bash -c "$PROGRAM_PATH" &
+    taskset -c $CPU_AFFINITY bash "$PROGRAM_PATH" &
 fi
+
+
+
 
 PID=$!
 
