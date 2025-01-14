@@ -12,6 +12,8 @@ fi
 PORT=$1
 VERSION=$2
 COMPONENT=$3
+TIMESTAMP=$4
+BUCKET_NAME=$5
 
 # Validate component
 if [ "$COMPONENT" != "SUT" ] && [ "$COMPONENT" != "client" ]; then
@@ -24,7 +26,7 @@ CGROUP_PATH="/sys/fs/cgroup/app-runner/$VERSION"
 if [ "$COMPONENT" == "SUT" ]; then
     PROGRAM_PATH="./cmd/flight-booking-service/flight-booking-service"
 else
-    PROGRAM_PATH="./run_client.sh $SUT_IP $SERVICE_PORT_2 $TIMESTAMP $BUCKET_NAME"
+    PROGRAM_PATH="./run_client.sh $SUT_IP $PORT $TIMESTAMP $BUCKET_NAME"
 fi
 BIND_ADDRESS="0.0.0.0:$PORT"
 
