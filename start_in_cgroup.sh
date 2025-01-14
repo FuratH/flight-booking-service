@@ -55,7 +55,7 @@ CGROUP_PATH="/sys/fs/cgroup/app-runner/$VERSION"
 if [ "$COMPONENT" == "SUT" ]; then
     PROGRAM_PATH="./cmd/flight-booking-service/flight-booking-service"
 else
-    PROGRAM_PATH="./run_client.sh $SUT_IP $PORT $TIMESTAMP $BUCKET_NAME"
+    PROGRAM_PATH="/run_client.sh $SUT_IP $PORT $TIMESTAMP $BUCKET_NAME"
 fi
 BIND_ADDRESS="0.0.0.0:$PORT"
 
@@ -94,7 +94,8 @@ if [ "$COMPONENT" == "SUT" ]; then
     export BIND_ADDRESS="$BIND_ADDRESS"
     taskset -c $CPU_AFFINITY "$PROGRAM_PATH" --port="$PORT" &
 else
-    taskset -c $CPU_AFFINITY bash "$PROGRAM_PATH" &
+    # Correctly execute the script with arguments
+    taskset -c $CPU_AFFINITY bash ./run_client.sh "$SUT_IP" "$PORT" "$TIMESTAMP" "$BUCKET_NAME" &
 fi
 
 PID=$!
