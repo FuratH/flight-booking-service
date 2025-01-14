@@ -1,19 +1,31 @@
 #!/bin/bash
 
 # Check for correct usage
-if [ "$#" -ne 2 ]; then
-    echo "Usage: $0 <port> <version>"
-    echo "Example: $0 3000 v1"
+if [ "$#" -ne 3 ]; then
+    echo "Usage: $0 <port> <version> <component>"
+    echo "Example: $0 3000 v1 SUT"
+    echo "Component must be either 'SUT' or 'client'."
     exit 1
 fi
 
 # Parameters
 PORT=$1
 VERSION=$2
+COMPONENT=$3
+
+# Validate component
+if [ "$COMPONENT" != "SUT" ] && [ "$COMPONENT" != "client" ]; then
+    echo "Invalid component: $COMPONENT. Must be 'SUT' or 'client'. Exiting."
+    exit 1
+fi
 
 # Configuration
 CGROUP_PATH="/sys/fs/cgroup/app-runner/$VERSION"
-PROGRAM_PATH="./cmd/flight-booking-service/flight-booking-service"
+if [ "$COMPONENT" == "SUT" ]; then
+    PROGRAM_PATH="./cmd/flight-booking-service/flight-booking-service"
+else
+    PROGRAM_PATH="./run_client.sh $SUT_IP $SERVICE_PORT_2 $TIMESTAMP $BUCKET_NAME"
+fi
 BIND_ADDRESS="0.0.0.0:$PORT"
 
 # Define CPU affinity based on the port
@@ -39,14 +51,21 @@ if [ ! -w "$CGROUP_PATH/cgroup.procs" ]; then
 fi
 
 # Ensure the program exists
-if [ ! -x "$PROGRAM_PATH" ]; then
-    echo "Program $PROGRAM_PATH does not exist or is not executable. Exiting."
-    exit 1
+if [ "$COMPONENT" == "SUT" ]; then
+    if [ ! -x "$PROGRAM_PATH" ]; then
+        echo "Program $PROGRAM_PATH does not exist or is not executable. Exiting."
+        exit 1
+    fi
 fi
 
-# Start the program with the specified environment variable in the background with CPU affinity
-export BIND_ADDRESS="$BIND_ADDRESS"
-taskset -c $CPU_AFFINITY "$PROGRAM_PATH" --port="$PORT" &
+# Start the program
+if [ "$COMPONENT" == "SUT" ]; then
+    export BIND_ADDRESS="$BIND_ADDRESS"
+    taskset -c $CPU_AFFINITY "$PROGRAM_PATH" --port="$PORT" &
+else
+    bash -c "$PROGRAM_PATH" &
+fi
+
 PID=$!
 
 if [ $? -ne 0 ]; then
