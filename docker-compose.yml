@@ -1,4 +1,4 @@
-version: '3.8'
+version: '3.3'
 
 services:
   core0:
@@ -6,7 +6,7 @@ services:
       context: .
     ports:
       - "3000:3000"
-    command: ["./flight-booking-service", "--port", "3000"]
+    command: ["./cmd/flight-booking-service/flight-booking-service", "--port", "3000"]
     deploy:
       resources:
         limits:
@@ -19,7 +19,7 @@ services:
       context: .
     ports:
       - "3001:3001"
-    command: ["./flight-booking-service", "--port", "3001"]
+    command: ["./cmd/flight-booking-service/flight-booking-service", "--port", "3001"]
     deploy:
       resources:
         limits:
