@@ -1,0 +1,28 @@
+version: '3.8'
+
+services:
+  core0:
+    build:
+      context: .
+    ports:
+      - "3000:3000"
+    command: ["./flight-booking-service", "--port", "3000"]
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+        reservations:
+          cpus: '1.0'
+
+  core1:
+    build:
+      context: .
+    ports:
+      - "3001:3001"
+    command: ["./flight-booking-service", "--port", "3001"]
+    deploy:
+      resources:
+        limits:
+          cpus: '1.5'
+        reservations:
+          cpus: '1.0'
