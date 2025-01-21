@@ -7,5 +7,7 @@ WORKDIR /usr/src/app
 # Copy the k6 script from the local machine to the container
 COPY ./script.js /usr/src/app/k6/script.js
 
+RUN chmod -R 777 /usr/src/app/k6
+
 # Set the default command to run the k6 script
 ENTRYPOINT ["k6", "run", "/usr/src/app/k6/script.js"]
