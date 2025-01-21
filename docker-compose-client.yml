@@ -14,9 +14,9 @@ services:
       - -e
       - target=${SUT_IP}:${SERVICE_PORT_1}
       - --out
-      - csv=client_results_${SERVICE_PORT_1}.csv
+      - csv=/usr/src/app/k6/client_results_${SERVICE_PORT_1}.csv
       - --summary-export
-      - client_summary_${SERVICE_PORT_1}.json
+      - /usr/src/app/k6/client_summary_${SERVICE_PORT_1}.json
     deploy:
       resources:
         limits:
@@ -37,9 +37,9 @@ services:
       - -e
       - target=${SUT_IP}:${SERVICE_PORT_2}
       - --out
-      - csv=client_results_${SERVICE_PORT_2}.csv
+      - csv=/usr/src/app/k6/client_results_${SERVICE_PORT_2}.csv
       - --summary-export
-      - client_summary_${SERVICE_PORT_2}.json
+      - /usr/src/app/k6/client_summary_${SERVICE_PORT_2}.json
     deploy:
       resources:
         limits:
