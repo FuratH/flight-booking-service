@@ -10,9 +10,10 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.5'
+          cpus: '1.5'  # Keep limit at 1.5 cores
         reservations:
-          cpus: '1.0'
+          cpus: '1.0'  # Reservation remains at 1.0 core
+    cpuset: "0,1"  # Bind to CPU cores 0 and 1
 
   core1:
     build:
@@ -23,6 +24,7 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.5'
+          cpus: '1.5'  # Keep limit at 1.5 cores
         reservations:
-          cpus: '1.0'
+          cpus: '1.0'  # Reservation remains at 1.0 core
+    cpuset: "2,3"  # Bind to CPU cores 2 and 3

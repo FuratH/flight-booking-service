@@ -20,7 +20,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.5'  
+          cpus: '1.5'  # Limit remains at 1.5 cores
+    cpuset: "0,1"  # Bind to CPU cores 0 and 1
     networks:
       - k6-network
 
@@ -43,7 +44,8 @@ services:
     deploy:
       resources:
         limits:
-          cpus: '1.5' 
+          cpus: '1.5'  # Limit remains at 1.5 cores
+    cpuset: "2,3"  # Bind to CPU cores 2 and 3
     networks:
       - k6-network
 

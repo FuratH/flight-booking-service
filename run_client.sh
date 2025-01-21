@@ -19,5 +19,3 @@ gsutil cp client_results_${SERVICE_PORT}.csv gs://duet-benchmarking-results/${TI
 sudo gcloud compute ssh hamdanfurat@sut --zone europe-west1-c -- \
     "gsutil cp '/VMStresser/stresser.log' 'gs://duet-benchmarking-results/${TIMESTAMP}/stresser.log'"
 
-
-
