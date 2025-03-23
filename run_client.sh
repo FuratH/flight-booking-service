@@ -12,10 +12,13 @@ k6 run ./k6/script.js -e target="$SUT_IP:$SERVICE_PORT" \
 
 wait
 
+touch "${SERVICE_PORT}_done.txt"
 
 gsutil cp client_results_${SERVICE_PORT}.csv gs://duet-benchmarking-results/${TIMESTAMP}/client_results_${SERVICE_PORT}.csv & gsutil cp client_summary_${SERVICE_PORT}.json gs://duet-benchmarking-results/${TIMESTAMP}/client_summary_${SERVICE_PORT}.json
 
 
-sudo gcloud compute ssh hamdanfurat@sut --zone europe-west1-c -- \
-    "gsutil cp '/VMStresser/stresser.log' 'gs://duet-benchmarking-results/${TIMESTAMP}/stresser.log'"
+#sudo gcloud compute ssh hamdanfurat@sut --zone europe-west1-c -- \
+#    "gsutil cp '/VMStresser/stresser.log' 'gs://duet-benchmarking-results/${TIMESTAMP}/stresser.log'"
+
+
 
