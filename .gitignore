@@ -1,5 +1,17 @@
 .idea/
 *.dot
 
-*/analysis/**
-**/analysis/**
+*/analysis/baseline/*
+**/analysis/baseline/**
+
+*/analysis/core_isolation/*
+**/analysis/core_isolation/**
+
+*/analysis/docker_runs/*
+**/analysis/docker_runs/**
+
+*/analysis/microvm/*
+**/analysis/microvm/**
+
+*/analysis/path/*
+**/analysis/path/**
