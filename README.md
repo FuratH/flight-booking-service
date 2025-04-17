@@ -1,7 +1,35 @@
-# flight-booking-service
-[![PkgGoDev](https://pkg.go.dev/badge/github.com/christophwitzko/flight-booking-service)](https://pkg.go.dev/github.com/christophwitzko/flight-booking-service)
 
-### GET /destinations
+# ✈️ Flight Booking Service
+
+
+A lightweight microservice for booking flights, extended with performance benchmarking infrastructure using `k6`, container orchestration via Docker Compose, and detailed analysis tooling.
+
+---
+
+## 📚 Table of Contents
+
+- [Introduction](#introduction)
+- [API Reference](#api-reference)
+- [Features](#features)
+- [Installation](#installation)
+- [Usage](#usage)
+- [Benchmarking & Analysis](#benchmarking--analysis)
+- [Scripts Overview](#scripts-overview)
+- [Docker Setup](#docker-setup)
+- [Configuration](#configuration)
+- [Troubleshooting](#troubleshooting)
+
+---
+
+## 📌 Introduction
+
+This project simulates a scalable flight booking service, enhanced with tooling to evaluate system behavior under load and noise conditions. It supports bootstrapped statistical testing, visualization, and controlled resource execution via cgroups.
+
+---
+
+## ✈️ API Reference
+
+### `GET /destinations`
 
 ```json
 {
@@ -10,95 +38,124 @@
 }
 ```
 
-### GET /flights
+### `GET /flights`, `GET /flights/{id}/seats`, `POST /bookings`, `GET /bookings`  
+_Full request/response examples are provided in the original [README.md](https://github.com/christophwitzko/flight-booking-service).
 
-```json
-[
-  {
-    "id": "fea320f4-8f9a-4483-af65-bd49d6838a83",
-    "from": "MUM",
-    "to": "STV",
-    "departure": "2022-07-05T23:23:51.37547748Z",
-    "arrival": "2022-07-06T03:27:51.37547748Z",
-    "status": "delayed"
-  }
-]
-```
+---
 
-### GET /flights/{id}/seats
+## ✨ Features
 
-```json
-[
-  {
-    "flightId": "7546127e-9924-43b9-aa53-961fd480d795",
-    "seat": "6C",
-    "row": 6,
-    "price": 433,
-    "available": true
-  }
-]
-```
+- Core flight booking microservice.
+- Two containerized SUT instances with CPU affinity control.
+- Two benchmarking client containers using `k6`.
+- Preprocessing and analysis of benchmarking results.
+- Relative change computation with bootstrapping.
+- Core isolation and noise effect visualization.
+- Integration with Google Cloud for result uploads.
 
-### POST /bookings
+---
 
-```json
-{
-  "flightId": "fea320f4-8f9a-4483-af65-bd49d6838a83",
-  "passengers": [
-    {
-      "name": "Chris",
-      "seat": "4C"
-    }
-  ]
-}
-```
+## 🧰 Installation
 
-```json
-{
-  "id": "a39e5a34-0e15-4e1e-934d-b55a34610fb4",
-  "userId": "user",
-  "flightId": "fea320f4-8f9a-4483-af65-bd49d6838a83",
-  "price": 37,
-  "status": "confirmed",
-  "passengers": [
-    {
-      "name": "Chris",
-      "seat": "4C"
-    }
-  ]
-}
-```
-
-
-### GET /bookings
-
-```json
-[
-  {
-    "id": "a39e5a34-0e15-4e1e-934d-b55a34610fb4",
-    "userId": "user",
-    "flightId": "fea320f4-8f9a-4483-af65-bd49d6838a83",
-    "price": 37,
-    "status": "confirmed",
-    "passengers": [
-      {
-        "name": "Chris",
-        "seat": "4C"
-      }
-    ]
-  }
-]
-```
-
-# Useful Commands
+Clone the repository:
 
 ```bash
-
-go test -run=^# -bench=. -cpuprofile=./bench.out ./...
-
-curl http://localhost:3000/debug/pprof/profile?seconds=10 > app-bench.out
-
-go tool pprof -http :9999 ./app-bench.out
-
-go tool pprof -http :9999 -diff_base=./bench-slow.out ./bench-fast.out
+git clone https://github.com/FuratH/flight-booking-service.git
+cd flight-booking-service
 ```
+
+Install Python dependencies for analysis:
+
+```bash
+pip install pandas numpy scipy matplotlib seaborn
+```
+
+---
+
+## 🚀 Usage
+
+Start SUT and client benchmarking containers:
+
+```bash
+docker-compose -f docker-compose.yml -f docker-compose-client.yml up --build
+```
+
+To run the analysis:
+
+```bash
+python preprocessing_filter.py
+python rel_change_table.py
+python aggregated_analysis_relative_changes.py
+```
+
+---
+
+## 📊 Benchmarking & Analysis
+
+Benchmarking results are stored as CSV files and visualized via:
+
+- `timeseries.py` – time-based comparison of HTTP durations.
+- `relative_change_plot.py` – sliding window relative % change.
+- `rel_change_table.py` – statistical comparison using bootstrapping.
+- `aggregated_analysis_relative_changes.py` – compares baseline vs experimental setups.
+
+Results can be exported to LaTeX for inclusion in academic papers.
+
+---
+
+## 📜 Scripts Overview
+
+| Script | Description |
+|--------|-------------|
+| `run_client.sh` | Run a single `k6` test and upload results. |
+| `run_client_docker.sh` | Run both k6 clients in Docker and upload results. |
+| `start_in_cgroup.sh` | Run components in specific cgroups with CPU affinity. |
+| `manage_cgroups.sh` | Create and manage cgroupv2 limits. |
+| `preprocessing_filter.py` | Clean and aggregate k6 CSV data. |
+| `rel_change_table.py` | Compute statistical performance differences. |
+| `aggregated_analysis_relative_changes.py` | Phase-based comparisons between runs. |
+| `timeseries.py`, `relative_change_plot.py` | Visualization utilities. |
+
+---
+
+## 🐳 Docker Setup
+
+### `docker-compose.yml`
+
+Launches 2 SUT instances:
+
+- Port 3000: cores 0–1
+- Port 3001: cores 2–3
+
+### `docker-compose-client.yml`
+
+Launches 2 benchmarking clients with matching CPU affinity and `k6` scripts.
+
+---
+
+## ⚙️ Configuration
+
+Modify `start_in_cgroup.sh` to:
+
+- Assign container to specific CPU cores.
+- Limit CPU usage per group (via `manage_cgroups.sh`).
+- Run either the SUT or client inside a defined cgroup.
+
+Example:
+
+```bash
+./start_in_cgroup.sh 3000 v1 SUT
+./start_in_cgroup.sh 3000 v1 client <SUT_IP> <timestamp> <bucket_name>
+```
+
+---
+
+
+## 🧯 Troubleshooting
+
+- **Permissions**: Ensure `cgroup2` is mounted and writable.
+- **Ports in use**: Check `3000` and `3001` aren’t already bound.
+- **Data errors**: Use `preprocessing_filter.py` to normalize k6 output before analysis.
+- **Cloud errors**: Verify GCP credentials for `gsutil` uploads.
+
+
